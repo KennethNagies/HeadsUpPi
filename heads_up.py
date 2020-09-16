@@ -47,7 +47,7 @@ def generateVideoMetadataForDirectory(directory):
 def generateVideoMetadataForFile(filePath):
     if not isVideoFile(filePath):
         return
-    if os.path.exists(filePath):
+    if os.path.exists(getMetadataPath(filePath)):
         print(filePath)
         return
     videoDuration = int(float(FFProbe(filePath).streams[0].duration))
