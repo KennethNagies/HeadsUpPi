@@ -15,7 +15,7 @@ class Menu:
 
     # This sets up the menu based on the provided options
     # If no sortedOptions are provided for the options, the options will be presented in alphabetical order
-    def __init__(self, header, optionsDict, sortedOptions):
+    def __init__(self, header, optionsDict, sortedOptions = None):
         self.header = header
         self.optionsDict = optionsDict
         self.sortedOptions = self.getSortedOptions(sortedOptions)

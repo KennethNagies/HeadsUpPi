@@ -2,6 +2,7 @@
 from menu_util import Menu, FileBrowserMenu, Directory, Option
 import os, re, time
 from ffprobe import FFProbe
+from GiantBomb_DL.giantbomb_dl import GiantBombMenu
 
 VIDEO_ROOT = "/home/pi/Videos"
 PLAY_VIDEO_COMMAND_FORMAT = "omxplayer -o alsa {}"
@@ -11,28 +12,43 @@ VIDEO_METADATA_FORMAT = "humd"
 
 MAIN_HEADER = "Select a Function"
 WATCH_VIDEOS_HEADER = "Watch Videos"
+DOWNLOAD_VIDEOS_HEADER = "Download Videos"
 SETUP_BLUETOOTH_HEADER = "Setup Bluetooth"
 GENERATE_VIDEO_METADATA_OPTION = "Generate Video Metadata"
 OPTIONS_ORDER = [WATCH_VIDEOS_HEADER,\
+                 DOWNLOAD_VIDEOS_HEADER,\
                  SETUP_BLUETOOTH_HEADER,\
                  GENERATE_VIDEO_METADATA_OPTION]
+
+GIANT_BOMB_INDIVIDUAL_EPISODES_HEADER = "GiantBomb (individual episodes)"
 
 VIDEO_STOPPED_PREFIX = "Stopped at:"
 
 def main():
     watchVideosOption = Option(browseVideos, None)
+    downloadVideosOption = Option(downloadVideos, None)
     setupBluetoothOption = Option(setupBluetooth, None)
     generateVideoMetadataOption = Option(generateVideoMetadata, None)
     optionsDict =\
-        {WATCH_VIDEOS_HEADER : watchVideosOption,\
-         SETUP_BLUETOOTH_HEADER : setupBluetoothOption,\
-         GENERATE_VIDEO_METADATA_OPTION: generateVideoMetadataOption}
+         {WATCH_VIDEOS_HEADER : watchVideosOption,\
+          DOWNLOAD_VIDEOS_HEADER : downloadVideosOption,\
+          SETUP_BLUETOOTH_HEADER : setupBluetoothOption,\
+          GENERATE_VIDEO_METADATA_OPTION: generateVideoMetadataOption}
     menu = Menu(MAIN_HEADER, optionsDict, OPTIONS_ORDER)
     menu.start()
     
 def browseVideos():
     browserMenu = FileBrowserMenu(WATCH_VIDEOS_HEADER, getRootDirectory(), playVideo, getVideoTitle, SUPPORTED_VIDEO_FORMATS)
     browserMenu.start()
+
+def downloadVideos():
+    optionsDict = {GIANT_BOMB_INDIVIDUAL_EPISODES_HEADER : Option(gbDownloadEps, None)}
+    downloadVideosMenu = Menu(DOWNLOAD_VIDEOS_HEADER, optionsDict)
+    downloadVideosMenu.start()
+
+def gbDownloadEps():
+    gbMenu = GiantBombMenu()
+    gbMenu.start()
 
 def generateVideoMetadata():
     generateVideoMetadataForDirectory(getRootDirectory())
