@@ -59,10 +59,18 @@ class GiantBombMenu(Menu):
             episodes.extend(newEpisodes)
             episodesFound = len(newEpisodes) > 0
         episodes.reverse()
+        episodeCount = len(episodes)
+        digits = 0
+        while episodeCount % 10 > 0:
+            episodeCount = int(episodeCount / 10)
+            digits += 1
         episodesDict = {}
+        episodeNum = 1
         for episode in episodes:
-            convertedEpisode = Episode(showName, episode["name"], episode["low_url"], episode["image"]["icon_url"])
+            episodeNumString = f"{str(episodeNum).zfill(digits)}"
+            convertedEpisode = Episode(showName, f"{episodeNumString} - {episode['name']}", episode["low_url"], episode["image"]["icon_url"])
             episodesDict[convertedEpisode.episodeName] = Option(lambda x=convertedEpisode : downloadEpisode(x), None)
+            episodeNum += 1
         showMenu = Menu(showName, episodesDict)
         showMenu.start()
 
