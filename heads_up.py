@@ -66,12 +66,15 @@ def generateVideoMetadataForFile(filePath):
     if os.path.exists(getMetadataPath(filePath)):
         print(filePath)
         return
-    videoDuration = int(float(FFProbe(filePath).streams[0].duration))
-    metadataFile = open(getMetadataPath(filePath), 'w')
-    metadataFile.write("00:00:00" + os.linesep)
-    metadataFile.write(time.strftime("%H:%M:%S", time.gmtime(videoDuration)) + os.linesep)
-    metadataFile.close()
-    print(filePath)
+    try:
+        videoDuration = int(float(FFProbe(filePath).streams[0].duration))
+        metadataFile = open(getMetadataPath(filePath), 'w')
+        metadataFile.write("00:00:00" + os.linesep)
+        metadataFile.write(time.strftime("%H:%M:%S", time.gmtime(videoDuration)) + os.linesep)
+        metadataFile.close()
+        print(filePath)
+    except:
+        print(f"error reading info from [{filePath}]")
 
 def isVideoFile(filePath):
     return os.path.splitext(filePath)[1] in SUPPORTED_VIDEO_FORMATS
